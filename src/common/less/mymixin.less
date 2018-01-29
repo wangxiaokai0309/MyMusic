@@ -1,0 +1,23 @@
+.bg-image(@url) {
+  background-image: ~'url(@{url}@2x.png)';
+  @media (min-device-pixel-ratio: 3), (-webkit-min-device-pixel-ratio: 3) {
+    background-image: ~'url(@{url}@3x.png)';
+  }
+}
+
+.no-wrap() {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+// 多行文本超出显示省略号
+.no-wrap-multi(@n) {
+  display: -webkit-box !important;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @n; // 可显示行数
+}
