@@ -12,7 +12,7 @@ import 'common/less/index.less'
 import * as _ from 'lodash'
 // import vConsole from 'vconsole'
 Vue.use(vueLazyLoad, {
-  loading: require('common/img/default.jpeg')
+  loading: require('common/img/yzu.jpeg')
 })
 Vue.use(Vuex)
 window.addEventListener(

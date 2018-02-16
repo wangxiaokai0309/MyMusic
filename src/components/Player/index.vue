@@ -51,9 +51,9 @@
             <span class="time time-r">{{formate(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon i-left" @click="changeMode">
-              <i :class="iconMode"></i>
-            </div>
+            <!--<div class="icon i-left" @click="changeMode">-->
+              <!--<i :class="iconMode"></i>-->
+            <!--</div>-->
             <div class="icon i-left" @click="prev">
               <i class="icon-prev"></i>
             </div>
@@ -673,7 +673,7 @@
             padding: 0 20px;
             text-align: center;
             i {
-              font-size: @font-size-large;
+              font-size: 80px;
             }
           }
           .i-right {
