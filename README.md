@@ -47,29 +47,6 @@
 * 处理 vendor，一般都是这部分体积大，相关类库一般不会变化，所以单独打包和其它文件一样加上 chunkhash 辨别文件是否变化，同时把 manifest 抽离出来，保证 manifest 变化不影响 vendor 变化导致缓存失效,这样默认就是 304，现在我通过 node 把他设置成强缓存了....外加 gzip
 * 采用路由懒加载
 
-### 适配
-
-* 多端同构 webApp, Hybrid，采用 [amfe-flexible@2.x](https://www.npmjs.com/package/amfe-flexible) （相比以前的版本我更倾向于 2.x）配合 px2rem
-
-* IOS 的 Safari 浏览器和微信 webview 兼容性和适配问题,此应用未调用设备 API
-
-#### IOS 适配
-
-* 打包成 ios Hybrid 系列模拟器正常 如 iphone7 Plus
-
-<img src="./static/hybrid.gif"/>
-
-* webApp && chrome
-
-<img src="./static/webApp.gif"/>
-
-#### Andriod 适配
-
-试了下腾讯的[weTest](http://wetest.qq.com/product/cloudphone?from=default_automail_new) 收费，没继续用
-
-后来发现 GenyMotion，[夜神](https://www.yeshen.com/) 不准备测试
-
-
 ## 本地预览
 
 ```bash
