@@ -53,6 +53,7 @@
     },
     watch: {
       query (val) {
+        console.log(val)
         this.resetQuery()
         !val ? '' : this.search()
       }
@@ -65,8 +66,9 @@
       search () {
         search(this.query, this.page, this.showSinger, this.perpage).then(res => {
           if (res.code === ERR_OK) {
-            if (!this.sloveResult(res.data).length) {
-            }
+            // if (!this.sloveResult(res.data).length) {
+            // }
+            // console.log(res.data)
             this.sloveResult(res.data)
           }
         })
@@ -79,8 +81,11 @@
         this.page = 1
       },
       sloveResult (data) {
+        // console.log(data)
+        this.songs = []
         if (data.zhida && data.zhida.singerid) {
           this.songs.push({ ...data.zhida, ...{ type: TYPE_SINGER } })
+          // console.log(this.songs)
         }
         if (data.song) {
           this._normalizeSongs(data.song.list)
@@ -111,7 +116,9 @@
           })
           // console.log(ret)
           this.songs = this.songs.concat(ret)
+          // console.log(this.songs)
           this.result = [...this.result, ...this.songs]
+          // console.log(this.result)
           this.page++
         })
       },
