@@ -8,6 +8,7 @@
   import { getSingerDetail } from 'api/singer'
   import * as config from 'api/config'
   import MusicList from 'components/MusicList'
+  import { getvkey } from "../../api/song"
   import { createSong } from 'common/js/song'
   export default {
     name: 'scrollDetail',
@@ -43,24 +44,39 @@
           config.singetDetailOpts
         ).then(res => {
           if (res.code === config.ERR_OK) {
-            this.songs = this._normalizeSongs(res.data.list)
+            this._normalizeSongs(res.data.list)
           } else {
             console.log(`歌手详情失败, 返回歌手列表哦`)
           }
         })
       },
       _normalizeSongs (list) {
+        // console.log(list)
+        let songmidlist = []
+        let songtypelist = []
         let ret = []
         list.forEach(item => {
           let { musicData } = item
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
-            // createSong(musicData).then(res => {
-            // ret.push(res)
-            // })
-          }
+          songmidlist.push(musicData.songmid)
+          songtypelist.push(0)
         })
-        return ret
+        getvkey(songmidlist,songtypelist).then((res)=>{
+          // console.log(res.url_mid.data.midurlinfo[0].vkey)
+          const vkeylist = res.url_mid.data.midurlinfo
+          let songlist = [...list]
+          songlist.map((item,index)=>{
+            item.purl = vkeylist[index].purl
+            return item
+          })
+          songlist.forEach(item =>{
+            const { musicData,purl } = item
+            if (musicData.songid && musicData.albummid) {
+              ret.push(createSong(musicData,purl))
+            }
+          })
+          // console.log(ret)
+          this.songs = ret
+        })
       }
     },
     components: {

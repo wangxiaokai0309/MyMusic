@@ -8,7 +8,8 @@
   import { mapGetters } from 'vuex'
   import { getMusicList } from 'api/rank'
   import { ERR_OK } from 'api/config'
-  import { createSong } from 'common/js/song'
+  import { getvkey } from "../../api/song"
+  import { createSong} from 'common/js/song'
   export default {
     name: 'TopList',
     data () {
@@ -40,22 +41,37 @@
         }
         getMusicList(this.topList.id).then(res => {
           if (res.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.songlist)
+            this._normalizeSongs(res.songlist)
+            // console.log(this.songs)
           }
         })
       },
       _normalizeSongs (list) {
+        let songmidlist = []
+        let songtypelist = []
         let ret = []
         list.forEach(item => {
           let { data } = item
-          if (data.songid && data.albummid) {
-            ret.push(createSong(data))
-            // createSong(data).then(res => {
-            // ret.push(res)
-            // })
-          }
+          songmidlist.push(data.songmid)
+          songtypelist.push(0)
         })
-        return ret
+        getvkey(songmidlist,songtypelist).then((res)=>{
+          // console.log(res.url_mid.data.midurlinfo[0].vkey)
+          const vkeylist = res.url_mid.data.midurlinfo
+          let songlist = [...list]
+          songlist.map((item,index)=>{
+            item.purl = vkeylist[index].purl
+            return item
+          })
+          songlist.forEach(item =>{
+            const { data,purl } = item
+            if (data.songid && data.albummid) {
+              ret.push(createSong(data,purl))
+            }
+          })
+          // console.log(ret)
+          this.songs = ret
+        })
       }
     },
     watch: {},

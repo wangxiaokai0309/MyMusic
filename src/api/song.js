@@ -23,27 +23,35 @@ export function getLyric(mid) {
       return Promise.resolve(res.data)
     })
 }
-
-export function getKey(mid, filename) {
-  const t = new Date().getUTCMilliseconds()
-  const guid = (Math.round(2147483647 * Math.random()) * t) % 1e10
-  const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+export function getvkey(songmidlist,songtypelist) {
+  const url = '/cgi-bin/musicu.fcg?_=' + (new Date()).getTime()
   const data = {
-    g_tk: 5381,
-    loginUin: 0,
-    inCharset: 'utf-8',
-    outCharset: 'utf-8',
-    notice: 0,
-    format: 'json',
-    cid: 205361747,
-    platform: 'yqq',
-    hostUin: 0,
-    needNewCode: 0,
-    uin: 0,
-    songmid: mid,
-    filename: filename,
-    guid: guid,
-    param: 'jsonpCallback'
+    comm:{
+      g_tk:5381,
+      uin:0,
+      format:"json",
+      inCharset:"utf-8",
+      outCharset:"utf-8",
+      notice:0,
+      platform:"h5",
+      needNewCode:1
+    },
+    url_mid:{
+      module:"vkey.GetVkeyServer",
+      method:"CgiGetVkey",
+      param:{
+        guid:"9363756000",
+        songmid: songmidlist,
+        songtype:songtypelist,
+        uin:"0",
+        loginflag:0,
+        platform:"23"
+      }
+    }
   }
-  return jsonp(url, data)
+  return axios.post(url, JSON.stringify(data))
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
 }
+

@@ -8,6 +8,7 @@
   import { mapGetters } from 'vuex'
   import { getSongList } from 'api/recommend'
   import { ERR_OK } from 'api/config'
+  import { getvkey } from "../../api/song"
   import { createSong } from 'common/js/song'
   export default {
     data () {
@@ -35,21 +36,36 @@
         }
         getSongList('api/getDisc', this.disc.dissid, {}).then(res => {
           if (res.data.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.data.cdlist[0].songlist)
+            this._normalizeSongs(res.data.cdlist[0].songlist)
           }
         })
       },
       _normalizeSongs (list) {
+        let songmidlist = []
+        let songtypelist = []
         let ret = []
-        list.forEach(musicData => {
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
-            // createSong(musicData).then(res => {
-            //   ret.push(res)
-            // })
-          }
+        list.forEach(item => {
+          let data = item
+          songmidlist.push(data.songmid)
+          songtypelist.push(0)
         })
-        return ret
+        getvkey(songmidlist,songtypelist).then((res)=>{
+          // console.log(res.url_mid.data.midurlinfo[0].vkey)
+          const vkeylist = res.url_mid.data.midurlinfo
+          let songlist = [...list]
+          songlist.map((item,index)=>{
+            item.purl = vkeylist[index].purl
+            return item
+          })
+          songlist.forEach(item =>{
+            const { purl } = item
+            if (item.songid && item.albummid) {
+              ret.push(createSong(item,purl))
+            }
+          })
+          // console.log(ret)
+          this.songs = ret
+        })
       }
     },
     watch: {},

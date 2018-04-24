@@ -32,7 +32,7 @@ export default class Song {
   }
 }
 
-export function createSong(musicData) {
+export function createSong(musicData,purl) {
   // const vKey = res.data.items[0].vkey
   // const t = new Date().getUTCMilliseconds()
   // const guid = (Math.round(2147483647 * Math.random()) * t) % 1e10
@@ -51,9 +51,10 @@ export function createSong(musicData) {
     // url: `http://dl.stream.qqmusic.qq.com/C400${
     //   musicData.songmid
     // }.m4a?guid=9035189320&vkey=F45CF08E99A296E05513E32A93FB60D08AB5BFC9141579AEE02158FA73B176DB7775B506740ED3940F48B51C15FB40FBB1C20F6DBADE946D&uin=&fromtag=999`
-    url: `http://isure.stream.qqmusic.qq.com/C100${
+    /*url: `http://isure.stream.qqmusic.qq.com/C100${
       musicData.songmid
-    }.m4a?fromtag=32`
+    }.m4a?fromtag=32`*/
+    url: 'http://dl.stream.qqmusic.qq.com/' + purl
   })
 }
 

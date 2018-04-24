@@ -24,6 +24,7 @@
   import Scroll from 'containers/Scroll'
   import { playlistMixin } from 'common/js/mixin'
   import Loading from 'containers/Loading'
+  import { getvkey } from "../../api/song"
   const TYPE_SINGER = 'singer'
 
   export default {
@@ -36,7 +37,8 @@
         pullUp: true,
         loadMore: true,
         loadEnd: true,
-        beforeScroll: true
+        beforeScroll: true,
+        songs: []
       }
     },
     props: {
@@ -65,8 +67,7 @@
           if (res.code === ERR_OK) {
             if (!this.sloveResult(res.data).length) {
             }
-            this.result = [...this.result, ...this.sloveResult(res.data)]
-            this.page++
+            this.sloveResult(res.data)
           }
         })
       },
@@ -78,26 +79,41 @@
         this.page = 1
       },
       sloveResult (data) {
-        let ret = []
         if (data.zhida && data.zhida.singerid) {
-          ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } })
+          this.songs.push({ ...data.zhida, ...{ type: TYPE_SINGER } })
         }
         if (data.song) {
-          ret = ret.concat(this._normalizeSongs(data.song.list))
+          this._normalizeSongs(data.song.list)
         }
-        return ret
       },
       _normalizeSongs (list) {
+        // console.log(list)
+        let songmidlist = []
+        let songtypelist = []
         let ret = []
-        list.forEach(musicData => {
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
-            // createSong(musicData).then(res => {
-            // ret.push(res)
-            // })
-          }
+        list.forEach(item => {
+          songmidlist.push(item.songmid)
+          songtypelist.push(0)
         })
-        return ret
+        getvkey(songmidlist,songtypelist).then((res)=>{
+          // console.log(res.url_mid.data.midurlinfo[0].vkey)
+          const vkeylist = res.url_mid.data.midurlinfo
+          let songlist = [...list]
+          songlist.map((item,index)=>{
+            item.purl = vkeylist[index].purl
+            return item
+          })
+          songlist.forEach(item =>{
+            const { purl } = item
+            if (item.songid && item.albummid) {
+              ret.push(createSong(item,purl))
+            }
+          })
+          // console.log(ret)
+          this.songs = this.songs.concat(ret)
+          this.result = [...this.result, ...this.songs]
+          this.page++
+        })
       },
       getIconCls (item) {
         if (item.type === TYPE_SINGER) {

@@ -97,6 +97,7 @@
           this.$nextTick(() => {
             this.$refs.Scroll.refresh()
             this.showLoading = false
+            // console.log(val)
           })
         }
       },

@@ -133,7 +133,7 @@
           snap: {
             loop: this.loop,
             threshold: 0.3,
-            speed: 400
+            speed: 800
           },
           bounce: false,
           click: this.click
