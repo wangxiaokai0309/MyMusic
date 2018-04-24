@@ -80,26 +80,6 @@ apiRouters.get('/lyric', function (req, res) {
   })
 })
 
-apiRouters.post('/vkey', function (req, res) {
-  var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?_=' + (new Date()).getTime()
-  axios.post(url, req.body,
-    {
-      headers:{
-        // contenttype: 'application/x-www-form-urlencoded',
-        referer: 'https://y.qq.com/w/toplist.html?ADTAG=myqq&from=myqq&channel=10007100&id=4&type=top',
-        origin: 'https://y.qq.com',
-        cookie: 'pgv_pvi=1075247104; pt2gguin=o1151524981; RK=ahLxgwyxeU; ptcz=562d3e0d44a5428ef6b9f1b0e409f80ecab0fa848435068ac76f2802c86d0b10; pgv_pvid=9363756000; ts_uid=3830332119; yq_index=0; eas_sid=11D511C826M914O9b6G6Y0x095; LW_sid=w1u5d1G8Q6w9p4g916z6413677; LW_uid=f1Q5E1U8f619n4N9A696V1W6U9; o_cookie=1151524981; pac_uid=1_1151524981; pgv_info=ssid=s2851029072; pgv_si=s4867572736; qqmusic_fromtag=10; yplayer_open=1; yq_playschange=1; player_exist=0; yq_playdata=s_0_1_2; yqq_stat=0; ts_refer=ADTAGmyqq; ts_last=y.qq.com/w/toplist.html',
-        // ':authority': 'u.y.qq.com',
-        // ':path': '/cgi-bin/musicu.fcg?_=' + (new Date()).getTime()
-      }
-  })
-    .then((response) => {
-      res.json(response.data)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-})
 
 app.use('/api', apiRouters)
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
